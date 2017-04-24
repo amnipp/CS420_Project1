@@ -75,6 +75,8 @@ public class Puzzle {
         int row = 0;
         int col = 0;
         for(int i = 0; i < currentState.length; ++i){
+            //TODO: Goal Location: Floor(value/3) = row, value%3 = col
+            //Doing the above will remove an entire loop
             int[] goalLoc = goalLocation(goalState, currentState[i]);
             // goalLoc[0] is column, goalLoc[1] is row
             sum += Math.abs(col - goalLoc[0]) + Math.abs(row - goalLoc[1]);
