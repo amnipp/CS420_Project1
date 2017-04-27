@@ -35,8 +35,17 @@ public class AI_8Puzzle {
                 System.out.println("Input is not a number. Please try again.");
             }
         }
-        if(cleanInput == 1) new RandomPuzzle();
-        else if(cleanInput == 2) new InputPuzzle();
+        Puzzle puzzle = null;
+        if(cleanInput == 1) puzzle = new RandomPuzzle();
+        else if(cleanInput == 2) puzzle = new InputPuzzle();
         else if(cleanInput == 3) System.exit(0);
+        new AI_8Puzzle(puzzle);
+    }
+    private Puzzle puzzle;
+    private AStar aStar;
+    public AI_8Puzzle(Puzzle puzzle){
+        if(puzzle == null) this.puzzle = new RandomPuzzle();
+        else this.puzzle = puzzle;
+        aStar = new AStar();
     }
 }

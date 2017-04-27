@@ -44,7 +44,8 @@ public class RandomPuzzle extends Puzzle {
         System.out.println("Amount of times failed: " + numFailed);
         System.out.println(Arrays.toString(getInitialState()));
         setInitalState(board);
-        setCurrentState(board);
+        setInitialStateNode(new StateNode(board, board,0,"noop"));
+        //setCurrentState(board);
     }
     
     /**
