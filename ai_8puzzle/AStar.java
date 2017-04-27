@@ -5,11 +5,23 @@
  */
 package ai_8puzzle;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+
 /**
  *
  * @author andrew
  */
 public class AStar {
+    private PriorityQueue<StateNode> frontier;
+    private HashSet<StateNode> exploredSet;
+    
+    public AStar(){
+        frontier = new PriorityQueue<>((final StateNode o1, final StateNode o2) -> o1.getCost() - o2.getCost());
+        exploredSet = new HashSet<>();
+    }
+    
     /**
      * Heuristic function that simply counts the number of misplaced tiles
      * Returns the total amount of misplaced tiles

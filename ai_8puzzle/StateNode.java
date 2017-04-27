@@ -38,6 +38,10 @@ public class StateNode {
         emptyPosition = emptyPos;
     }
     
+    public StateNode(StateNode node){
+        this(node.getInitialState(), node.getCurrentState(), node.getCost(), node.getAction(), node.getPredecessor(), node.getEmptyPosition());
+    }
+    
     public StateNode getPredecessor(){
         return predecessor;
     }    
@@ -56,6 +60,9 @@ public class StateNode {
     public String getAction(){
         return actionTaken;
     }
+    public int getEmptyPosition(){
+        return emptyPosition;
+    }
     public void setPredecessor(StateNode pred){
         predecessor = pred;
     }
@@ -71,10 +78,11 @@ public class StateNode {
                 if(emptyPos - 3 < 0) return false;
                 break;
             case "down":
-                if(emptyPos + 3 > currentBoard.length) return false;
+                if(emptyPos + 3 >= currentBoard.length) return false;
                 break;
             case "left":
-                if(emptyPos == 0 || emptyPos%3 == 0) return false;
+                if(emptyPos == 0) return false;
+                if(emptyPos%3 == 0) return false;
                 break;
             case "right":
                 if(emptyPos+1%3 == 0) return false;
@@ -88,32 +96,31 @@ public class StateNode {
     public StateNode generateNode(String action){
         StateNode node;
         //Integer[] initState, Integer[] currState, int cost, String actionTaken;
-        Integer[] newState = currentState;
+        Integer[] newState = currentState.clone();
         int newEmpty = emptyPosition;
-        System.out.println("DEBUG: Empty Pos: " + emptyPosition + " - Empty Pos % 3: " + emptyPosition%3);
         switch(action){
              case "up":
                 if(emptyPosition - 3 >= 0) {
-                    newState = swap(currentState, emptyPosition, emptyPosition-3);
+                    newState = swap(newState, emptyPosition, emptyPosition-3);
                     newEmpty = emptyPosition - 3;
                 }
                 break;
             case "down":
                 if(emptyPosition + 3 <= currentState.length){
-                    newState = swap(currentState, emptyPosition, emptyPosition+3);
+                    newState = swap(newState, emptyPosition, emptyPosition+3);
                     newEmpty = emptyPosition + 3;
                 }
                 break;
             case "left":
                 if(emptyPosition == 0) break;
                 if(emptyPosition%3 != 0){
-                    newState = swap(currentState, emptyPosition, emptyPosition-1);
+                    newState = swap(newState, emptyPosition, emptyPosition-1);
                     newEmpty = emptyPosition - 1;
                 }
                 break;
             case "right":
                 if((emptyPosition+1)%3 != 0){
-                    newState = swap(currentState, emptyPosition, emptyPosition+1);
+                    newState = swap(newState, emptyPosition, emptyPosition+1);
                     newEmpty = emptyPosition + 1;
                 }
                 break;

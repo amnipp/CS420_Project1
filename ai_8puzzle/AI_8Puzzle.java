@@ -5,6 +5,7 @@
  */
 package ai_8puzzle;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -50,7 +51,11 @@ public class AI_8Puzzle {
         StateNode init = puzzle.getInitialStateNode();
         System.out.println(init);
         System.out.println("-------------");
-        StateNode next = init.generateNode("down");
-        System.out.println(next);        
+        ArrayList<StateNode> children = init.expandCurrentNode();
+        for(int i = 0; i < children.size(); ++i){
+            System.out.println("Action taken: " + children.get(i).getAction());
+            System.out.println(children.get(i));
+            System.out.println("-------------");
+        }
     }
 }
