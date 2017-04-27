@@ -24,6 +24,7 @@ public class RandomPuzzle extends Puzzle {
         Integer[] board = new Integer[9];
         Arrays.fill(board, -1);
         int numFailed = 0;
+        int emptyPosition = 0;
         while(!canSolve){
             Random rand = new Random();
             board = new Integer[9];
@@ -35,6 +36,7 @@ public class RandomPuzzle extends Puzzle {
                 while(arrIndexOf(board,tile) != -1){
                     tile = rand.nextInt(9);
                 }
+                if(tile.equals(0)) emptyPosition = i;
                 board[i] = tile;
             }
             //Runs the Puzzle classes checkSolvable function, returns true if inversions is even
@@ -42,9 +44,9 @@ public class RandomPuzzle extends Puzzle {
             if(canSolve == false) numFailed++;
         }
         System.out.println("Amount of times failed: " + numFailed);
-        System.out.println(Arrays.toString(getInitialState()));
+        System.out.println("Empty Pos: " + emptyPosition);
         setInitalState(board);
-        setInitialStateNode(new StateNode(board, board,0,"noop"));
+        setInitialStateNode(new StateNode(board, board,0,"noop",null,emptyPosition));
         //setCurrentState(board);
     }
     

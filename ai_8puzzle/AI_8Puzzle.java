@@ -47,5 +47,10 @@ public class AI_8Puzzle {
         if(puzzle == null) this.puzzle = new RandomPuzzle();
         else this.puzzle = puzzle;
         aStar = new AStar();
+        StateNode init = puzzle.getInitialStateNode();
+        System.out.println(init);
+        System.out.println("-------------");
+        StateNode next = init.generateNode("down");
+        System.out.println(next);        
     }
 }
