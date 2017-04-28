@@ -14,12 +14,13 @@ import java.util.Arrays;
  */
 public class StateNode {
     private StateNode predecessor;
-    private StateNode successor;
     final private Integer[] initalState;
     final private Integer[] currentState;
     final private int cost;
     final private String actionTaken;
     final private int emptyPosition;
+    private int fringeSize = 0;
+    private int exploredSize = 0;
     public StateNode(){
         initalState = new Integer[9];
         Arrays.fill(initalState,-1);
@@ -42,12 +43,15 @@ public class StateNode {
         this(node.getInitialState(), node.getCurrentState(), node.getCost(), node.getAction(), node.getPredecessor(), node.getEmptyPosition());
     }
     
+    public void setFringeSize(int fSize){
+        fringeSize = fSize;
+    }
+    public void setExploredSize(int eSize){
+        exploredSize = eSize;
+    }
     public StateNode getPredecessor(){
         return predecessor;
     }    
-    public StateNode getSuccessor(){
-        return successor;
-    }
     public Integer[] getInitialState(){
         return initalState;
     }
@@ -63,13 +67,24 @@ public class StateNode {
     public int getEmptyPosition(){
         return emptyPosition;
     }
-    public void setPredecessor(StateNode pred){
-        predecessor = pred;
+    public int getFringeSize(){
+        return fringeSize;
     }
-    public void setSuccessor(StateNode succ){
-        successor = succ;
+    public int getExploredSize(){
+        return exploredSize;
     }
-
+    /**
+     * Checks if the action will keep the empty pos in bounds of the state
+     * Since it is a 1D array and the actions treat it like a matrix we need to 
+     * think about the mathematical conversion between them.
+     * {0,1,2,3,4,5,6,7,8}  How it is stored
+     * 
+     * {{0,1,2},
+     *  {3,4,5},
+     *  {4,7,8}} How the actions treat it
+     * Moving up or down requires the index to be in bounds for i+-3
+     * Moving left and right requires the index to be i%3!=0 and i+1%3!=0
+     */
     public boolean inBounds(String action){
         Integer[] currentBoard = currentState;
         int emptyPos = emptyPosition;
@@ -92,7 +107,20 @@ public class StateNode {
         }
         return true;
     }
-    
+     /**
+     * Generates a child node given a specific action. Returns the child node 
+     * that will have the empty tile moved and will have its step cost increased
+     * linearly.
+     * Since it is a 1D array and the actions treat it like a matrix we need to 
+     * think about the mathematical conversion between them.
+     * {0,1,2,3,4,5,6,7,8}  How it is stored
+     * 
+     * {{0,1,2},
+     *  {3,4,5},
+     *  {4,7,8}} How the actions treat it
+     * Moving up or down requires the index to be in bounds for i+-3
+     * Moving left and right requires the index to be i%3!=0 and i+1%3!=0
+     */   
     public StateNode generateNode(String action){
         StateNode node;
         //Integer[] initState, Integer[] currState, int cost, String actionTaken;
@@ -129,7 +157,20 @@ public class StateNode {
         node = new StateNode(initalState, newState, getCost()+1, action, this, newEmpty);
         return node;
     }
-  
+    /**
+     * Helper function for generateNode, used to swap the empty tile with another 
+     */
+    private Integer[] swap(Integer[] arr, int pos1, int pos2){
+        Integer temp = arr[pos1];
+        arr[pos1] = arr[pos2];
+        arr[pos2] = temp;
+        return arr;
+    }  
+    
+    /**
+     * Generates all the children for this specific node by doing all possible
+     * actions. Up, down, left, right
+     */
     public ArrayList<StateNode> expandCurrentNode(){
         ArrayList<StateNode> successorList = new ArrayList<>();
         if(inBounds("up"))
@@ -143,18 +184,19 @@ public class StateNode {
         return successorList;
     }
     
-    private Integer[] swap(Integer[] arr, int pos1, int pos2){
-        Integer temp = arr[pos1];
-        arr[pos1] = arr[pos2];
-        arr[pos2] = temp;
-        return arr;
-    }
-    
+    /**
+     * The hash code for this object is simply the hash code for the current state
+     * of the board. Uses the Arrays built in hash code function
+     */
     @Override
     public int hashCode() {
         return Arrays.hashCode(currentState);
     }
 
+    /**
+     * Two nodes are considered equal if the current state of their boards are 
+     * equal
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -167,12 +209,12 @@ public class StateNode {
             return false;
         }
         final StateNode other = (StateNode) obj;
-        if (!Arrays.deepEquals(this.currentState, other.currentState)) {
-            return false;
-        }
-        return true;
+        return Arrays.deepEquals(this.currentState, other.currentState);
     }
     
+    /**
+     * Prints out the board as a matrix 
+     */
     @Override
     public String toString(){
         String board = "";

@@ -50,12 +50,11 @@ public class AI_8Puzzle {
         aStar = new AStar();
         StateNode init = puzzle.getInitialStateNode();
         System.out.println(init);
-        System.out.println("-------------");
-        ArrayList<StateNode> children = init.expandCurrentNode();
-        for(int i = 0; i < children.size(); ++i){
-            System.out.println("Action taken: " + children.get(i).getAction());
-            System.out.println(children.get(i));
-            System.out.println("-------------");
-        }
+        StateNode goalNode1 = aStar.runAStar(init, true);
+        System.out.println("-------------------- FINISHED H1 ------------------------");
+        StateNode goalNode2 = aStar.runAStar(init, false);
+        System.out.println("Solved Using H1\nDepth: " + goalNode1.getCost() + " - Fringe Size: " + goalNode1.getFringeSize() + " - Explored Set Size: " + goalNode1.getExploredSize());
+        System.out.println("Solved Using H1\nDepth: " + goalNode2.getCost() + " - Fringe Size: " + goalNode2.getFringeSize() + " - Explored Set Size: " + goalNode2.getExploredSize());
+        
     }
 }
