@@ -25,3 +25,33 @@ Where 0 represents the empty tile.
 Please handle the input/output gracefully.
 
 Note that the 8-puzzle states are divided into two disjoint sets, such that any state is reachable from any other state in the same set, which no state is reachable from any state in the other set. Before you solve a puzzle, you need to make sure that it's solvable. 
+
+
+______________________________________________________________________________________________________________________________________________________________________
+Compile the Java source code
+        `javac .\AI_8Puzzle\src\*.java`
+Run the program
+        `java .\AI_8Puzzle\src\`
+Select the option you wish to see
+        1) Create and solve a random puzzle
+        2) Create your own puzzle then solve
+        3) Import a text file to create puzzles then solve
+Option 1:
+        After selecting this option, the program will ask you how many times to run it
+        Type in an integer and hit enter, the program will then create and solve them all
+        **NOTE** This will take some time since the average depth is around 24
+Option 2:
+        The program will ask you to enter a puzzle, it accepts two formats:
+            a) 012345678
+            b) 0 1 2
+                3 4 5
+                6 7 8
+         If you use format b then you will need to enter all three lines before the program
+         will notify you
+         Once you finish, the puzzle will be created and then solved
+Option 3:
+         The program will ask you for a file name with your list of puzzles
+         The program will accept input from the file if it is in the format
+              012345678\n
+         It will ignore any lines where the first character is not a number
+         The program will create a puzzle for every line within that file

@@ -13,6 +13,7 @@ public class Puzzle {
     //Fields
     private Integer[] initialState = new Integer[9];
     private StateNode initialStateNode;
+    
     final private Integer[] goalState = {0,1,2,3,4,5,6,7,8};
     //Getters and Setters for fields
     public void setInitalState(Integer[] state){
@@ -31,6 +32,9 @@ public class Puzzle {
         return goalState;
     }   
 
+    public boolean createPuzzle(String sPuz){
+        return false;
+    }
     /**
      * Checks to see if a puzzle is solvable. A solvable puzzle has a positive 
      * of inversions. An inversion is when a tile with a greater number on it 

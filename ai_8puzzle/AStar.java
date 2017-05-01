@@ -26,7 +26,8 @@ public class AStar {
      * of the smallest cost first and then they will be added to the explored set
      * which should disallow duplicate states
      */
-    public StateNode runAStar(StateNode initialState, boolean isH1){
+    public StateNode runAStar(StateNode initialState, boolean isH1, boolean print){
+        int searchCost = 0;
         exploredSet = new HashSet<>();
         if(isH1){
             fringe = new PriorityQueue<>((final StateNode o1, final StateNode o2) -> (o1.getCost()+misplacedTiles(o1)) - (o2.getCost()+misplacedTiles(o2)));
@@ -36,15 +37,20 @@ public class AStar {
         fringe.add(initialState);
         while(!fringe.isEmpty()){
             StateNode current = fringe.poll();
-            exploredSet.add(current);
+            exploredSet.add(current);    
+            if(print == true){
+                System.out.println(current);
+                System.out.println("------ Current Step Cost: " + current.getCost() + " - Search Cost: " + searchCost + "  - Fringe Size: " + fringe.size() + " - Explored Size:  " + exploredSet.size() + " -------");              
+            }
             if(Arrays.equals(current.getCurrentState(), goal)){
-                return current;
-            }           
-            System.out.println(current);
-            System.out.println("------ Current Cost: " + current.getCost() + " Fringe Size: " + fringe.size() + " Explored Size:  " + exploredSet.size() + " -------");
+                System.out.println("----------- GOAL FOUND AT SEARCH COST OF " + searchCost + "------------");
+                 return current;
+            }     
             ArrayList<StateNode> children = current.expandCurrentNode();
             for(int i = 0; i < children.size(); ++i){
                 if(!exploredSet.contains(children.get(i))){
+                    searchCost++;
+                    children.get(i).setSearchCost(searchCost);
                     children.get(i).setExploredSize(exploredSet.size());
                     children.get(i).setFringeSize(fringe.size());
                     fringe.add(children.get(i));
@@ -61,7 +67,7 @@ public class AStar {
     public int misplacedTiles(StateNode node){
         int misplaced = 0;
         for(int i = 0; i < node.getCurrentState().length; ++ i){
-            if(!node.getCurrentState()[i].equals(i)) misplaced++;
+            if(node.getCurrentState()[i] != i) misplaced++;
         }
         return misplaced;
     }
@@ -74,17 +80,13 @@ public class AStar {
      */
     public int sumOfDistance(StateNode node){
         int sum = 0;
-        //Since I am using a 1D array instead of a 2D array, I need to find the 
-        //row and column in order to find the x and the y coordinates for the 
-        //distance
         for(int i = 0; i < node.getCurrentState().length; ++i){
             if(node.getCurrentState()[i] == i) continue;
+            if(node.getCurrentState()[i] == 0) continue;
             int row = node.getCurrentState()[i]/3;
             int col = node.getCurrentState()[i]%3;
             int goalRow = i/3;
             int goalCol = i%3;
-            // goalLoc[0] is column, goalLoc[1] is row
-            //sum += Math.abs(col - goalLoc[0]) + Math.abs(row - goalLoc[1]);
             sum += Math.abs(col - goalCol) +  Math.abs(row - goalRow);
         }
         return sum;

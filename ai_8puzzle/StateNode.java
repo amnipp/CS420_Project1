@@ -21,6 +21,7 @@ public class StateNode {
     final private int emptyPosition;
     private int fringeSize = 0;
     private int exploredSize = 0;
+    private int searchCost = 0;
     public StateNode(){
         initalState = new Integer[9];
         Arrays.fill(initalState,-1);
@@ -48,6 +49,12 @@ public class StateNode {
     }
     public void setExploredSize(int eSize){
         exploredSize = eSize;
+    }
+    public void setSearchCost(int searchCost){
+        this.searchCost = searchCost;
+    }
+    public int getSearchCost(){
+        return searchCost;
     }
     public StateNode getPredecessor(){
         return predecessor;
